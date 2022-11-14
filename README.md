@@ -1,37 +1,5 @@
 MISA.AMIS.KeToan
 
-# tcdn3_web09_pvlong_vuejs
-
-## Project setup
-
-```
-npm install
-```
-
-### Compiles and hot-reloads for development
-
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-
-```
-npm run build
-```
-
-### Lints and fixes files
-
-```
-npm run lint
-```
-
-### Customize configuration
-
-See [Configuration Reference](https://cli.vuejs.org/config/).
-
-#
-
 # 📚 RULES CHUNG KHI SỬ DỤNG GIT
 
 ## Quy tắc đặt tên nhánh khi thi công chức năng:
