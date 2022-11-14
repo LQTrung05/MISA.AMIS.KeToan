@@ -1,4 +1,4 @@
-﻿namespace MISA.AMIS.KeToan.API.Entities.DTO
+﻿namespace MISA.AMIS.KeToan.Common.Entities
 {
 
     /// <summary>

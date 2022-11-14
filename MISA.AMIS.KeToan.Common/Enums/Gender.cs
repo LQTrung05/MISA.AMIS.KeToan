@@ -1,4 +1,4 @@
-﻿namespace MISA.AMIS.KeToan.API.Entities.Enums
+﻿namespace MISA.AMIS.KeToan.Common.Enums
 {
     /// <summary>
     /// Giới tính

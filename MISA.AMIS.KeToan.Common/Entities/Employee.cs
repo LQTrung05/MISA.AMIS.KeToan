@@ -1,22 +1,26 @@
-﻿using MISA.AMIS.KeToan.API.Entities.Enums;
+﻿using MISA.AMIS.KeToan.Common.Enums;
+using System.ComponentModel.DataAnnotations;
 
-namespace MISA.AMIS.KeToan.API.Entities
+namespace MISA.AMIS.KeToan.Common.Entities
 {
     public class Employee
     {
         /// <summary>
         /// ID nhân viên
         /// </summary>
+        [Key]
         public Guid EmployeeID { get; set; }
 
         /// <summary>
         /// Mã nhân viên
         /// </summary>
+        [Required(ErrorMessage ="Mã nhân viên không để trống")]
         public string EmployeeCode { get; set; }
 
         /// <summary>
         /// Tên nhân viên
         /// </summary>
+        [Required(ErrorMessage ="Tên nhân viên không để trống")]
         public string EmployeeName { get; set; }
 
         /// <summary>
@@ -32,6 +36,7 @@ namespace MISA.AMIS.KeToan.API.Entities
         /// <summary>
         /// ID đơn vị phòng ban
         /// </summary>
+        [Required(ErrorMessage ="Phòng ban không để trống")]
         public Guid DerpartmentID { get; set; }
 
         /// <summary>

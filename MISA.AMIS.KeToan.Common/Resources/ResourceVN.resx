@@ -119,35 +119,50 @@
   </resheader>
   <data name="DateOfBirthIsValid" xml:space="preserve">
     <value>Ngày sinh không được lớn hơn ngày hiện tại</value>
+    <comment>Thông báo trả về cho người dùng</comment>
   </data>
   <data name="DepartmentIsRequired" xml:space="preserve">
     <value>Mã đơn vị không được trống</value>
+    <comment>Thông báo trả về cho người dùng</comment>
   </data>
   <data name="EmailInvalid" xml:space="preserve">
     <value>Email không hợp lệ</value>
+    <comment>Thông báo trả về cho người dùng</comment>
   </data>
   <data name="EmployeeCodeDuplicate" xml:space="preserve">
     <value>Mã nhân viên đã tồn tại</value>
+    <comment>Thông báo trả về cho người dùng</comment>
   </data>
   <data name="EmployeeCodeInvalid" xml:space="preserve">
     <value>Mã nhân viên phải kết thúc là một chữ số</value>
+    <comment>Thông báo trả về cho người dùng</comment>
   </data>
   <data name="EmployeeCodeIsRequired" xml:space="preserve">
     <value>Mã nhân viên được phép bỏ trống</value>
+    <comment>Thông báo trả về cho người dùng</comment>
   </data>
   <data name="EmployeeNameIsRequired" xml:space="preserve">
     <value>Tên nhân viên không được trống</value>
+    <comment>Thông báo trả về cho người dùng</comment>
   </data>
   <data name="Error_Exception" xml:space="preserve">
     <value>Có lỗi xảy ra, liên hệ Misa để được giúp đỡ</value>
+    <comment>Thông báo trả về cho người dùng</comment>
   </data>
   <data name="IdentityDateIsValid" xml:space="preserve">
     <value>Ngày cấp không được lớn hơn ngày hiện tại</value>
+    <comment>Thông báo trả về cho người dùng</comment>
   </data>
   <data name="InputInvalid" xml:space="preserve">
     <value>Dữ liệu nhập vào không hợp lệ</value>
+    <comment>Thông báo trả về cho người dùng</comment>
+  </data>
+  <data name="MoreInfo_Exception" xml:space="preserve">
+    <value>https://openapi.misa.com.vn/errorcode</value>
+    <comment>Thông tin chi tiết của lỗi khi gặp Exception</comment>
   </data>
   <data name="Url_not_found" xml:space="preserve">
     <value>Url không hợp lệ</value>
+    <comment>Thông báo trả về cho người dùng</comment>
   </data>
 </root>

@@ -1,13 +1,13 @@
-﻿namespace MISA.AMIS.KeToan.API.Entities.BaseClass
+﻿namespace MISA.AMIS.KeToan.Common.Entities
 {
     public class Error
     {
         /// <summary>
         /// Mã lỗi 
         /// </summary>
-        public int ErrorCode {
-           get; set; 
-        }
+        //public int ErrorCode {
+        //   get; set; 
+        //}
         /// <summary>
         /// Thông báo lỗi cho bên dev
         /// </summary>

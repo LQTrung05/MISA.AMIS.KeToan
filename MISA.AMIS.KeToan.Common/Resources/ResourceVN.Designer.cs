@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MISA.AMIS.KeToan.API.Resources {
+namespace MISA.AMIS.KeToan.Common.Resources {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace MISA.AMIS.KeToan.API.Resources {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MISA.AMIS.KeToan.API.Resources.ResourceVN", typeof(ResourceVN).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MISA.AMIS.KeToan.Common.Resources.ResourceVN", typeof(ResourceVN).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -147,6 +147,15 @@ namespace MISA.AMIS.KeToan.API.Resources {
         public static string InputInvalid {
             get {
                 return ResourceManager.GetString("InputInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://openapi.misa.com.vn/errorcode.
+        /// </summary>
+        public static string MoreInfo_Exception {
+            get {
+                return ResourceManager.GetString("MoreInfo_Exception", resourceCulture);
             }
         }
         

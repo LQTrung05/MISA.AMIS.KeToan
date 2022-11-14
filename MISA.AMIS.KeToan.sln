@@ -3,7 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32228.430
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MISA.AMIS.KeToan.API", "MISA.AMIS.KeToan.API\MISA.AMIS.KeToan.API.csproj", "{CEC443D7-9DC6-417E-A14B-C5512514177D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MISA.AMIS.KeToan.API", "MISA.AMIS.KeToan.API\MISA.AMIS.KeToan.API.csproj", "{CEC443D7-9DC6-417E-A14B-C5512514177D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MISA.AMIS.KeToan.BL", "MISA.AMIS.KeToan.BL\MISA.AMIS.KeToan.BL.csproj", "{0B4306A7-BD62-44E4-B0C7-DDDB0F2091C6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MISA.AMIS.KeToan.DL", "MISA.AMIS.KeToan.DL\MISA.AMIS.KeToan.DL.csproj", "{B0949026-ADFB-4994-ADA9-4F1591ECFC01}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MISA.AMIS.KeToan.Common", "MISA.AMIS.KeToan.Common\MISA.AMIS.KeToan.Common.csproj", "{0AD5BF5E-9B78-4069-9319-0F93935E9C4A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +21,18 @@ Global
 		{CEC443D7-9DC6-417E-A14B-C5512514177D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CEC443D7-9DC6-417E-A14B-C5512514177D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CEC443D7-9DC6-417E-A14B-C5512514177D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B4306A7-BD62-44E4-B0C7-DDDB0F2091C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B4306A7-BD62-44E4-B0C7-DDDB0F2091C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B4306A7-BD62-44E4-B0C7-DDDB0F2091C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B4306A7-BD62-44E4-B0C7-DDDB0F2091C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B0949026-ADFB-4994-ADA9-4F1591ECFC01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0949026-ADFB-4994-ADA9-4F1591ECFC01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0949026-ADFB-4994-ADA9-4F1591ECFC01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0949026-ADFB-4994-ADA9-4F1591ECFC01}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0AD5BF5E-9B78-4069-9319-0F93935E9C4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0AD5BF5E-9B78-4069-9319-0F93935E9C4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0AD5BF5E-9B78-4069-9319-0F93935E9C4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0AD5BF5E-9B78-4069-9319-0F93935E9C4A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
