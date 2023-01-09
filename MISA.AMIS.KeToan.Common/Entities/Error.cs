@@ -3,12 +3,6 @@
     public class Error
     {
         /// <summary>
-        /// Mã lỗi 
-        /// </summary>
-        //public int ErrorCode {
-        //   get; set; 
-        //}
-        /// <summary>
         /// Thông báo lỗi cho bên dev
         /// </summary>
         public string? DevMsg { get; set; }
@@ -22,6 +16,10 @@
         /// Thông tin chi tiết về lỗi
         /// </summary>
         public string? MoreInfo { get; set; }
+
+        /// <summary>
+        /// Danh sách các lỗi cụ thể
+        /// </summary>
         public object Data { get; set; }
 
         /// <summary>

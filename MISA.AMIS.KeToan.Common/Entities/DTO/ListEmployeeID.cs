@@ -1,6 +1,5 @@
 ﻿namespace MISA.AMIS.KeToan.Common.Entities
 {
-
     /// <summary>
     /// Danh sách ID của nhân viên
     /// </summary>

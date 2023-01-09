@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using MISA.AMIS.KeToan.BL;
 using MISA.AMIS.KeToan.Common.Entities;
+using MISA.AMIS.KeToan.Common.Exceptions;
 using MISA.AMIS.KeToan.Common.Resources;
+using MySqlConnector;
 
 namespace MISA.AMIS.KeToan.API.Controllers
 {
@@ -11,7 +13,9 @@ namespace MISA.AMIS.KeToan.API.Controllers
     public class BaseController<T> : ControllerBase
     {
         #region Field
+
         private IBaseBL<T> _baseBL;
+
         #endregion
 
         #region Constructor
@@ -19,6 +23,7 @@ namespace MISA.AMIS.KeToan.API.Controllers
         {
             _baseBL = baseBL;
         }
+
         #endregion
 
 
@@ -43,8 +48,6 @@ namespace MISA.AMIS.KeToan.API.Controllers
             catch (Exception ex)
             {
                 return ShowException(ex);
-                
-                 
             }
         }
 
@@ -67,7 +70,7 @@ namespace MISA.AMIS.KeToan.API.Controllers
             }
             catch (Exception ex)
             {
-                
+
                 return ShowException(ex);
             }
         }
@@ -82,26 +85,44 @@ namespace MISA.AMIS.KeToan.API.Controllers
         public IActionResult InsertARecord([FromBody] T record)
         {
             try
-            {
+            { 
                 // Xử lý nghiệp vụ
                 var recordID = _baseBL.InsertARecord(record);
                 // Xử lý kết quả trả về
-                if( recordID != null)
+                if (recordID != null)
                     return StatusCode(StatusCodes.Status201Created, recordID);
 
                 return StatusCode(StatusCodes.Status500InternalServerError);
 
             }
+            catch (MISAValidateException e)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest,
+                    new Error
+                    {
+                        DevMsg = e.Message,
+                        UsersMsg = ResourceVN.Error_Exception,
+                        MoreInfo = "https://openapi.misa.com.vn/errorcode",
+                        TraceId = Guid.NewGuid(),
+                        Data = e.ErrorDetails
+                    });
+            }
+            catch( MySqlException e2)
+            {
+                Console.WriteLine(e2);
+                return StatusCode(StatusCodes.Status400BadRequest,
+                    new Error
+                    {
+                        DevMsg = e2.Message,
+                        UsersMsg = ResourceVN.Error_Exception,
+                        MoreInfo = "https://openapi.misa.com.vn/errorcode",
+                        TraceId = Guid.NewGuid(),
+                        //Data = e.ErrorDetails
+                    });
+            }
             catch (Exception e)
             {
-                var error = new Error
-                {
-                    DevMsg = e.Message,
-                    UsersMsg = ResourceVN.Error_Exception,
-                    MoreInfo = "https://openapi.misa.com.vn/errorcode",
-                    TraceId = Guid.NewGuid()
-                };
-                return StatusCode(StatusCodes.Status500InternalServerError, error);
+               return ShowException(e);
             }
         }
 
@@ -122,12 +143,24 @@ namespace MISA.AMIS.KeToan.API.Controllers
                 var result = _baseBL.UpdateARecord(recordID, record);
                 if (result != null)
                     return StatusCode(200, result);
-                else
+                else 
                     return StatusCode(StatusCodes.Status500InternalServerError, result);
             }
-            catch (Exception ex)
+            catch (MISAValidateException e)
             {
-                return ShowException(ex);
+                return StatusCode(StatusCodes.Status400BadRequest,
+                    new Error
+                    {
+                        DevMsg = e.Message,
+                        UsersMsg = ResourceVN.Error_Exception,
+                        MoreInfo = "https://openapi.misa.com.vn/errorcode",
+                        TraceId = Guid.NewGuid(),
+                        Data = e.ErrorDetails
+                    });
+            }
+            catch (Exception e)
+            {
+                return ShowException(e);
             }
 
         }
@@ -160,14 +193,14 @@ namespace MISA.AMIS.KeToan.API.Controllers
         /// </summary>
         /// <param name="ex">Exception nhận được</param>
         /// <returns>Trả về một đối tượng gồm các thông báo lỗi đến người dùng, thông báo lỗi đến dev</returns>
-        public IActionResult ShowException(Exception ex)
+        protected IActionResult ShowException(Exception ex)
         {
             var error = new Error
             {
                 DevMsg = ex.Message,
                 UsersMsg = ResourceVN.Error_Exception,
-                MoreInfo = "https://openapi.misa.com.vn/errorcode",
-                TraceId = Guid.NewGuid()
+                MoreInfo = ResourceVN.MoreInfo_Exception,
+                TraceId = Guid.NewGuid() 
             };
             return StatusCode(StatusCodes.Status500InternalServerError, error);
         }

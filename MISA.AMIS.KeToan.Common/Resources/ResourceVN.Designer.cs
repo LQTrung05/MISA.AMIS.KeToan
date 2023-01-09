@@ -70,7 +70,7 @@ namespace MISA.AMIS.KeToan.Common.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Mã đơn vị không được trống.
+        ///   Looks up a localized string similar to Phòng ban không để trống.
         /// </summary>
         public static string DepartmentIsRequired {
             get {
@@ -88,7 +88,7 @@ namespace MISA.AMIS.KeToan.Common.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Mã nhân viên đã tồn tại.
+        ///   Looks up a localized string similar to Mã nhân viên đã tồn tại, vui lòng kiểm tra lại.
         /// </summary>
         public static string EmployeeCodeDuplicate {
             get {
@@ -97,7 +97,7 @@ namespace MISA.AMIS.KeToan.Common.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Mã nhân viên phải kết thúc là một chữ số.
+        ///   Looks up a localized string similar to Mã nhân viên phải kết thúc là số và dài không quá 20 kí tự.
         /// </summary>
         public static string EmployeeCodeInvalid {
             get {
@@ -129,6 +129,42 @@ namespace MISA.AMIS.KeToan.Common.Resources {
         public static string Error_Exception {
             get {
                 return ResourceManager.GetString("Error_Exception", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Có lỗi, không thể xóa hàng loạt bản ghi.
+        /// </summary>
+        public static string Error_not_delete_batch {
+            get {
+                return ResourceManager.GetString("Error_not_delete_batch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Có lỗi khi xóa nhóm nhà cung cấp.
+        /// </summary>
+        public static string Error_not_delete_provider_group {
+            get {
+                return ResourceManager.GetString("Error_not_delete_provider_group", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Có lỗi, không thể lấy được danh sách các bản ghi.
+        /// </summary>
+        public static string Error_not_get_records {
+            get {
+                return ResourceManager.GetString("Error_not_get_records", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lỗi không thể thêm các bản ghi.
+        /// </summary>
+        public static string Error_not_insert_batch {
+            get {
+                return ResourceManager.GetString("Error_not_insert_batch", resourceCulture);
             }
         }
         

@@ -12,7 +12,7 @@ namespace MISA.AMIS.KeToan.DL
     public class BaseDL<T> : IBaseDL<T>
     {
         /// <summary>
-        /// Hàm lấy danh sách bản ghi
+        /// Lấy danh sách bản ghi
         /// </summary>
         /// <returns>Danh sách bản ghi</returns>
         /// Created by: LQTrung(11/11/2022)
@@ -54,7 +54,6 @@ namespace MISA.AMIS.KeToan.DL
                 // Thuc hien goi vao DB
                 var record = mySqlConnection.QueryFirstOrDefault<T>(storeProcedureName, parameter, commandType: System.Data.CommandType.StoredProcedure);
                 return record;
-
             }
         }
 
@@ -66,30 +65,19 @@ namespace MISA.AMIS.KeToan.DL
         /// Created by: LQTrung (12/11/2022)
         public Guid InsertARecord(T record)
         {
-
             //Chuẩn bị câu lệnh SQL
             string storeProcedureName = String.Format(Procedure.INSERT, typeof(T).Name);
 
             //Chuẩn bị tham số đầu vào
-            var parameters = new DynamicParameters();
-            var properties = typeof(T).GetProperties();
+            record.GetType().GetProperty($"{typeof(T).Name}ID").SetValue(record, Guid.NewGuid());
 
-            foreach (var property in properties)
-            {
-                var propertyValue = property.GetValue(record);
-                parameters.Add($"@{property.Name}", propertyValue);
-            }
-
-            var recordID = Guid.NewGuid();
-            parameters.Add($"@{typeof(T).Name}ID", recordID);
             //Khởi tạo kết nối tới DB MySQL
             using (var mySqlConnection = new MySqlConnection(DatabaseContext.ConnectionString))
             {
                 //Thực hiện gọi vào DB
                 int numberOfRowsAffected = mySqlConnection.Execute(storeProcedureName, record, commandType: System.Data.CommandType.StoredProcedure);
-                return recordID;
+                return (Guid)record.GetType().GetProperty($"{typeof(T).Name}ID").GetValue(record);
             }
-
         }
 
         /// <summary>
@@ -103,29 +91,19 @@ namespace MISA.AMIS.KeToan.DL
              Guid recordID,
              T record)
         {
-
             //Chuẩn bị câu lệnh SQL
             string storeProcedureName = String.Format(Procedure.UPDATE, typeof(T).Name);
 
             //Chuẩn bị tham số đầu vào
-            var parameters = new DynamicParameters();
-            var properties = typeof(T).GetProperties();
-
-            foreach (var property in properties)
-            {
-                var propertyValue = property.GetValue(record);
-                parameters.Add($"@{property.Name}", propertyValue);
-            }
-            parameters.Add($"@{typeof(T).Name}ID", recordID);
+            //record.GetType().GetProperty($"{typeof(T).Name}ID").SetValue(record, recordID);
 
             //Khởi tạo kết nối tới DB MySQL
             using (var mySqlConnection = new MySqlConnection(DatabaseContext.ConnectionString))
             {
                 //Thực hiện gọi vào DB
-                var numberOfRowsAffected = mySqlConnection.QueryFirstOrDefault(storeProcedureName, parameters, commandType: System.Data.CommandType.StoredProcedure);
+                var numberOfRowsAffected = mySqlConnection.QueryFirstOrDefault(storeProcedureName, record, commandType: System.Data.CommandType.StoredProcedure);
                 return recordID;
             }
-
         }
 
         /// <summary>
@@ -136,7 +114,6 @@ namespace MISA.AMIS.KeToan.DL
         /// CreatedBy: LQTrung (12/11/2022)
         public int DeleteARecord(Guid recordID)
         {
-
             //Chuẩn bị câu lệnh SQL
             var storeProcedureName = String.Format(Procedure.DELETE, typeof(T).Name);
 
@@ -151,11 +128,8 @@ namespace MISA.AMIS.KeToan.DL
                 parameter, commandType: System.Data.CommandType.StoredProcedure);
                 //Xử lý kết quả trả về 
                     return numberOfRowsAffected;
-               
             }
         }
-
-       
     }
 
 }

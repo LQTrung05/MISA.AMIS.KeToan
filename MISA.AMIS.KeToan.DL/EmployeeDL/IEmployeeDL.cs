@@ -1,4 +1,5 @@
 ﻿using MISA.AMIS.KeToan.Common.Entities;
+using MISA.AMIS.KeToan.Common.Entities.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,9 +8,6 @@ using System.Threading.Tasks;
 
 namespace MISA.AMIS.KeToan.DL
 {
-    //internal là trong cùng 1 project thì mới có thể truy cập được vào interface này thôi
-    // thế nên nếu muốn các project khác cũng có thể truy cập được vào thì dùng public, vì sau này tầng DL có tương tác 
-    // với cả tầng BL nữa mà, cả project Common nữa
     public interface IEmployeeDL : IBaseDL<Employee>
     {
         /// <summary>
@@ -17,6 +15,34 @@ namespace MISA.AMIS.KeToan.DL
         /// </summary>
         /// <param name="listEmployeeID">Danh sách ID của các nhân viên muốn xóa</param>
         /// <returns>Số nhân viên bị xóa thành công</returns>
-        public int DeleteRecords(ListEmployeeID listEmployeeID);
+        /// CreatedBy: LQTrung(12/11/2022)
+        public bool DeleteRecords(List<Guid> listEmployeeID);
+
+        /// <summary>
+        /// Tìm kiếm, phân trang
+        /// </summary>
+        /// <param name="keyword">Từ khóa muốn tìm kiếm</param>
+        /// <param name="limit">Số bản ghi muốn lấy</param>
+        /// <param name="pageNumber">Lấy danh sách nhân viên ở trang số bao nhiêu</param>
+        /// <returns>
+        /// 200:Danh sách nhân viên tìm thấy theo điều kiện, tổng số bản ghi 
+        /// </returns>
+        /// /// CreatedBy: LQTrung(12/11/2022)
+        public SearchAndPaging SearchAndPagingEmployee(string? keyword, int limit = 20, int pageNumber = 1);
+
+        /// <summary>
+        /// Lấy mã nhân viên lớn nhất có trong database
+        /// </summary>
+        /// <returns>Mã nhân viên lớn nhất</returns>
+        /// CreatedBy: LQTrung (12/11/2022)
+        public string GetEmployeeCodeMax();
+
+        /// <summary>
+        /// Hàm kiểm tra trùng mã khi thêm mới hoặc sửa
+        /// </summary>
+        /// <param name="employeeID"></param>
+        /// <param name="employeeCode"></param>
+        /// <returns></returns>
+        public bool CheckUpDuplicateCode(Guid employeeID, string employeeCode);
     }
 }

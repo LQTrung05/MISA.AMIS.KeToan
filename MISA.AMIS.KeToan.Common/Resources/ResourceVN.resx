@@ -122,7 +122,7 @@
     <comment>Thông báo trả về cho người dùng</comment>
   </data>
   <data name="DepartmentIsRequired" xml:space="preserve">
-    <value>Mã đơn vị không được trống</value>
+    <value>Phòng ban không để trống</value>
     <comment>Thông báo trả về cho người dùng</comment>
   </data>
   <data name="EmailInvalid" xml:space="preserve">
@@ -130,11 +130,11 @@
     <comment>Thông báo trả về cho người dùng</comment>
   </data>
   <data name="EmployeeCodeDuplicate" xml:space="preserve">
-    <value>Mã nhân viên đã tồn tại</value>
+    <value>Mã nhân viên đã tồn tại, vui lòng kiểm tra lại</value>
     <comment>Thông báo trả về cho người dùng</comment>
   </data>
   <data name="EmployeeCodeInvalid" xml:space="preserve">
-    <value>Mã nhân viên phải kết thúc là một chữ số</value>
+    <value>Mã nhân viên phải kết thúc là số và dài không quá 20 kí tự</value>
     <comment>Thông báo trả về cho người dùng</comment>
   </data>
   <data name="EmployeeCodeIsRequired" xml:space="preserve">
@@ -147,6 +147,22 @@
   </data>
   <data name="Error_Exception" xml:space="preserve">
     <value>Có lỗi xảy ra, liên hệ Misa để được giúp đỡ</value>
+    <comment>Thông báo trả về cho người dùng</comment>
+  </data>
+  <data name="Error_not_delete_batch" xml:space="preserve">
+    <value>Có lỗi, không thể xóa hàng loạt bản ghi</value>
+    <comment>Thông báo trả về cho người dùng</comment>
+  </data>
+  <data name="Error_not_delete_provider_group" xml:space="preserve">
+    <value>Có lỗi khi xóa nhóm nhà cung cấp</value>
+    <comment>Thông báo trả về cho người dùng</comment>
+  </data>
+  <data name="Error_not_get_records" xml:space="preserve">
+    <value>Có lỗi, không thể lấy được danh sách các bản ghi</value>
+    <comment>Thông báo trả về cho người dùng</comment>
+  </data>
+  <data name="Error_not_insert_batch" xml:space="preserve">
+    <value>Lỗi không thể thêm các bản ghi</value>
     <comment>Thông báo trả về cho người dùng</comment>
   </data>
   <data name="IdentityDateIsValid" xml:space="preserve">

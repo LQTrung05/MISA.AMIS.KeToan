@@ -7,6 +7,8 @@ using System.Text.RegularExpressions;
 using System.Data.SqlClient;
 using MISA.AMIS.KeToan.BL;
 using MISA.AMIS.KeToan.Common.Resources;
+using MISA.AMIS.KeToan.Common.Entities.DTO;
+using MISA.AMIS.KeToan.Common.Enums;
 
 namespace MISA.AMIS.KeToan.API.Controllers
 {
@@ -24,7 +26,6 @@ namespace MISA.AMIS.KeToan.API.Controllers
         }
         #endregion
 
-
         /// <summary>
         /// API tìm kiếm, phân trang
         /// </summary>
@@ -32,80 +33,87 @@ namespace MISA.AMIS.KeToan.API.Controllers
         /// <param name="employeeName">Tên nhân viên muốn tìm kiếm</param>
         /// <param name="phoneNumber">Số điện thoại muốn tìm kiếm</param>
         /// <param name="limit">Số bản ghi muốn lấy</param>
-        /// <param name="offset">Lấy từ vị trí bao nhiêu</param>
+        /// <param name="pageNumber">Lấy danh sách nhân viên ở trang số bao nhiêu</param>
         /// <returns>
         /// 200:Danh sách nhân viên tìm thấy theo điều kiện, tổng số bản ghi 
         /// </returns>
+        /// CreatedBy: LQTrung(12/11/2022)
         [HttpGet]
         [Route("SearchAndPaging")]
         public IActionResult SearchAndPagingEmployee(
-            [FromQuery] string? employeeCode,
-            [FromQuery] string? employeeName,
-            [FromQuery] string? phoneNumber,
+            [FromQuery] string? keyword,
             [FromQuery] int limit = 20,
-            [FromQuery] int offset = 0)
+            [FromQuery] int pageNumber = 1)
         {
             try
             {
-                //Khởi tạo kết nối tới DB MySQL
-                string connectionString = "Server=localhost;Port=3306;Database=misa.web09.tcdn.lqtrung;Uid=root;Pwd=123@;";
-                var mySqlConnection = new MySqlConnection(connectionString);
-
-                //Chuẩn bị câu lệnh SQL
-                string procedureSearchAndPaging = "Proc_employee_SearchAndPaging";
-                string procedureGetTotalEmployee = "Proc_employee_GetTotalEmployee";
-
-                //Chuẩn bị tham số đầu vào
-                var parameters = new DynamicParameters();
-                parameters.Add("@EmployeeCode", employeeCode);
-                parameters.Add("@EmployeeName", employeeName);
-                parameters.Add("@PhoneNumber", phoneNumber);
-                parameters.Add("@Limit", limit);
-                parameters.Add("@Offset", offset);
-
-
-                // Thuc hien goi vao DB
-                var employees = mySqlConnection.Query(procedureSearchAndPaging, parameters, commandType: System.Data.CommandType.StoredProcedure);
-                var totalRecord = mySqlConnection.QueryFirstOrDefault(procedureGetTotalEmployee, commandType: System.Data.CommandType.StoredProcedure);
-                if (employees != null && totalRecord != null)
-                {
-                    var result = new
-                    {
-                        totalRecord,
-                        employees
-                    };
+                var result = (SearchAndPaging)_employeeBL.SearchAndPagingEmployee(keyword, limit, pageNumber);
+                if (result != null)
                     return StatusCode(StatusCodes.Status200OK, result);
-                }
                 return StatusCode(500);
             }
             catch (Exception ex)
             {
-                //return ShowException(ex);
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
-
+                return ShowException(ex);
 
             }
-
         }
 
-        
         /// <summary>
         /// Xóa hàng loạt nhân viên
         /// </summary>
         /// <param name="listEmployeeID">Danh sách ID của các nhân viên muốn xóa</param>
         /// <returns>Status code 200 khi xóa thành công</returns>
-        /// CreatedBy: LQTrung(5/11/2022)
+        /// CreatedBy: LQTrung(12/11/2022)
         /// Xóa hàng loạt không sử dụng method HttpDelete, mà sử dụng HttpPost, và vì xóa nhiều nên phải truyền vào
         /// FormBody vì số lượng tham số có thể nhiều hơn độ dài cho phép của FormRoute
         [HttpPost("DeleteBatch")]
-        public IActionResult DeleteRecords( [FromBody] ListEmployeeID listEmployeeID)
+        public IActionResult DeleteRecords([FromBody] List<Guid> listEmployeeID)
         {
             try
             {
-                int numberOfRowsAffected = _employeeBL.DeleteRecords(listEmployeeID);
+                var numberOfRowsAffected = _employeeBL.DeleteRecords(listEmployeeID);
                 //Xử lý kết quả trả về 
-                if (numberOfRowsAffected > 0)
+                if (numberOfRowsAffected == true)
                     return StatusCode(StatusCodes.Status200OK, listEmployeeID);
+
+                var error = new Error
+                {
+                    DevMsg = ResourceVN.Error_not_delete_batch,
+                    UsersMsg = ResourceVN.Error_not_delete_batch,
+                    MoreInfo = "https://openapi.misa.com.vn/errorcode",
+                    TraceId = Guid.NewGuid()
+                };
+                return StatusCode(StatusCodes.Status500InternalServerError, error);
+            }
+            catch (Exception ex)
+            {
+                var error = new Error
+                {
+                    DevMsg = ex.Message,
+                    UsersMsg = ResourceVN.Error_not_delete_batch,
+                    MoreInfo = "https://openapi.misa.com.vn/errorcode",
+                    TraceId = Guid.NewGuid()
+                };
+                return StatusCode(StatusCodes.Status500InternalServerError, error);
+
+            }
+        }
+
+        /// <summary>
+        /// Lấy mã nhân viên lớn nhất có trong database
+        /// </summary>
+        /// <returns>Mã nhân viên lớn nhất</returns>
+        /// CreatedBy: LQTrung (12/11/2022)
+        [HttpGet("NewEmployeeCode")]
+        public IActionResult GetEmployeeCodeMax()
+        {
+            try
+            {
+                string newEmployeeCode = _employeeBL.GetEmployeeCodeMax();
+                //Xử lý kết quả trả về 
+                if (newEmployeeCode != null)
+                    return StatusCode(StatusCodes.Status200OK, newEmployeeCode);
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
             catch (Exception ex)
@@ -121,40 +129,35 @@ namespace MISA.AMIS.KeToan.API.Controllers
 
             }
         }
-        //public IActionResult DeleteMultipleEmployees([FromBody] ListEmployeeID listEmployeeID)
-        //{
-        //    //Khởi tạo kết nối tới DB
-        //    string connectionString = "Server=localhost;Port=3306;Database=misa.web09.tcdn.lqtrung;Uid=root;Pwd=123@;";
-        //    var mySqlConnection = new MySqlConnection(connectionString);
-        //    mySqlConnection.Open();
-        //    //Chuẩn bị câu lệnh SQL
-        //    var storeProcedureName = "Proc_employee_Delete";
 
-        //    var trans = mySqlConnection.BeginTransaction();
-        //    //var count = listEmployeeID.EmployeeIDs.Count();
+        /// <summary>
+        /// Xuất khẩu danh sách nhân viên
+        /// </summary>
+        /// <returns>File excel chứa danh sách nhân viên</returns>
+        /// CreatedBy: LQTrung(12/11/2022)
+        [HttpGet("ExportExcelFile")]
+        public IActionResult ExportExcelFile(CancellationToken cancellationToken)
+        {
+            try
+            {
+                var stream = _employeeBL.ExportExcelFile();
+                string excelName = $"Danh_sach_nhan_vien.xlsx";
 
-        //    try
-        //    {
-        //        //Chuẩn bị tham số đầu vào
-        //        foreach (var employeeID in listEmployeeID.EmployeeIDs)
-        //        {
-        //            var parameters = new DynamicParameters();
-        //            parameters.Add("@EmployeeID", employeeID);
-        //            mySqlConnection.Execute(storeProcedureName, parameters, trans, commandType: System.Data.CommandType.StoredProcedure);
-        //        }
-        //        trans.Commit();
+                return File(stream, "application/octet-stream", excelName);
 
-        //        return StatusCode(200, listEmployeeID.EmployeeIDs.Count);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        trans.Rollback();
-        //        //return ShowException(ex);
-        //        return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                var error = new Error
+                {
+                    DevMsg = ex.Message,
+                    UsersMsg = ResourceVN.Error_Exception,
+                    MoreInfo = "https://openapi.misa.com.vn/errorcode",
+                    TraceId = Guid.NewGuid()
+                };
+                return StatusCode(StatusCodes.Status500InternalServerError, error);
 
-        //    }
-        //}
-
-
+            }
+        }
     }
 }
