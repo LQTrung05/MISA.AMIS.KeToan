@@ -18,7 +18,7 @@ namespace MISA.AMIS.KeToan.Common.Entities
         /// <summary>
         /// Số tài khoản công nợ phải trả
         /// </summary>
-        public string AccountNumber { get; set; }
+        public string AccountPayableNumber { get; set; }
 
         /// <summary>
         /// Tên tài khoản công nợ phải trả

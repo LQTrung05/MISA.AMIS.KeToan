@@ -33,9 +33,8 @@ builder.Services.AddScoped<IProviderDL, ProviderDL>();
 builder.Services.AddScoped<IProviderBL, ProviderBL>();
 builder.Services.AddScoped<IProvider_ProviderGroupDL, Provider_ProviderGroupDL>();
 builder.Services.AddScoped<IProvider_ProviderGroupBL, Provider_ProviderGroupBL>();
-
-
-
+builder.Services.AddScoped<IReceiptDL, ReceiptDL>();
+builder.Services.AddScoped<IReceiptBL, ReceiptBL>();
 builder.Services.AddScoped<IPaymentTermBL, PaymentTermBL>();
 builder.Services.AddScoped<IPaymentTermDL, PaymentTermDL>();
 
@@ -73,4 +72,4 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-//Mỗi lần chạy project thì file program.cs sẽ chạy đầu tiên để cấu hình lên cái ứng dụng web của mình đã
+//Mỗi lần chạy project thì file program.cs sẽ chạy đầu tiên 

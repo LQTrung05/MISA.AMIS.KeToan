@@ -23,7 +23,8 @@ namespace MISA.AMIS.KeToan.Common.Entities
         /// <summary>
         /// Số tài khoản
         /// </summary>
-        public string? BankAccountNumber { get; set; }
+        [Required(ErrorMessage ="Số tài khoản không để trống")]
+        public string BankAccountNumber { get; set; }
 
         /// <summary>
         /// Tên ngân hàng

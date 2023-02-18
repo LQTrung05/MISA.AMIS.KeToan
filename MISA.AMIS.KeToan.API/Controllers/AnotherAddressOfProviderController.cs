@@ -59,7 +59,7 @@ namespace MISA.AMIS.KeToan.API.Controllers
         }
 
         /// <summary>
-        /// Thêm nhiều tài khoản ngân hàng của một nhà cung cấp
+        /// Thêm nhiều tài địa chỉ khác của một nhà cung cấp
         /// </summary>
         /// <param name="record">Thông tin bản ghi cần thêm</param>
         /// <returns>ID của bản ghi vừa thêm</returns>
@@ -72,7 +72,7 @@ namespace MISA.AMIS.KeToan.API.Controllers
                 var result = _anotherAddressOfProviderBL.InsertMultilAnotherAddress(providerID, listData);
                 //Xử lý kết quả trả về 
                 if (result)
-                    return StatusCode(StatusCodes.Status200OK);
+                    return StatusCode(StatusCodes.Status201Created, result);
 
                 var error = new Error
                 {

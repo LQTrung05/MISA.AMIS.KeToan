@@ -80,6 +80,39 @@ namespace MISA.AMIS.KeToan.DL
             }
         }
 
+        // Thêm mới nhiều bản ghi, chỉ áp dụng cho việc thêm nhiều trong trường hợp quan hệ 1-n, ví dụ ở trường hợp này là nhà cung cấp - tài khoản ngân hàng, nhà cung cấp - địa chỉ khác
+        public bool InsertBatchRecord( Guid recordID, List<T> records)
+        {
+            //Lúc chuẩn hóa thì có sự giống nhau là đều thêm recordID vào list.
+            //Khác nhau là PrimaryKey của từng trường hợp lại khác nhau
+            foreach (var item in records)
+            {
+                item.GetType().GetProperty("ProviderID").SetValue(item, recordID);  
+                item.GetType().GetProperty($"{typeof(T).Name}ID").SetValue(item, Guid.NewGuid());
+            }
+
+            //2. Thực hiện thêm mới danh sách các địa chỉ khác của một nhà cung cấp vào database
+            //Khởi tạo kết nối tới DB MySQL
+            using (var mySqlConnection = new MySqlConnection(DatabaseContext.ConnectionString))
+            {
+                mySqlConnection.Open();
+                var trans = mySqlConnection.BeginTransaction();
+                try
+                {
+
+                    mySqlConnection.Execute($@"insert {typeof(T).Name} 
+                            values(@AnotherAddressOfProviderID, @ProviderID, @AnotherAddress, @CreatedDate, @CreatedBy)", records, transaction: trans);
+                    trans.Commit();
+                    return true;
+                }
+                catch (Exception)
+                {
+                    trans.Rollback();
+                    return false;
+                }
+            }
+        }
+
         /// <summary>
         /// Sửa thông tin một bản ghi
         /// </summary>

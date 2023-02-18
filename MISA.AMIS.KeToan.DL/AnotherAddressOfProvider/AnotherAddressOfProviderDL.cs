@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace MISA.AMIS.KeToan.DL
 {
-    public class AnotherAddressOfProviderDL:BaseDL<AnotherAddressOfProvider>, IAnotherAddressOfProviderDL
+    public class AnotherAddressOfProviderDL : BaseDL<AnotherAddressOfProvider>, IAnotherAddressOfProviderDL
     {
         /// <summary>
         /// Lấy danh sách các địa chỉ khác của một nhà cung cấp
@@ -45,37 +45,36 @@ namespace MISA.AMIS.KeToan.DL
         /// <param name="providerID">ID của nhà cung cấp</param>
         /// <param name="anotherAddressList">Danh sách địa chỉ khác thuộc nhà cung cấp</param>
         /// <returns></returns>
-        public bool InsertMultilAnotherAddress(Guid providerID, List<AnotherAddressOfProvider> listData)
+        public bool InsertMultilAnotherAddress(Guid providerID, List<AnotherAddressOfProvider> anotherAddressList)
         {
-            //Khai báo 1 biến đếm
-            int count = 0;
-            //Chuẩn bị câu lệnh SQL
-            string storeProcedureName = String.Format(Procedure.INSERT, "AnotherAddressOfProvider");
-            foreach (var record in listData)
+            //1. Chuẩn hóa danh sách các địa chỉ khác trước khi thêm vào database
+            foreach (var anotherAddress in anotherAddressList)
             {
-                //Chuẩn bị tham số đầu vào
-                record.GetType().GetProperty("ProviderID").SetValue(record, providerID);
-                record.GetType().GetProperty($"{typeof(AnotherAddressOfProvider).Name}ID").SetValue(record, Guid.NewGuid());
-
-                //Khởi tạo kết nối tới DB MySQL
-                using (var mySqlConnection = new MySqlConnection(DatabaseContext.ConnectionString))
+                anotherAddress.ProviderID = providerID;
+                anotherAddress.AnotherAddressOfProviderID = Guid.NewGuid();
+            }
+            //2. Thực hiện thêm mới danh sách các địa chỉ khác của một nhà cung cấp vào database
+            //Khởi tạo kết nối tới DB MySQL
+            using (var mySqlConnection = new MySqlConnection(DatabaseContext.ConnectionString))
+            {
+                mySqlConnection.Open();
+                var trans = mySqlConnection.BeginTransaction();
+                try
                 {
-                    //Thực hiện gọi vào DB
-                    int numberOfRowsAffected = mySqlConnection.Execute(storeProcedureName, record, commandType: System.Data.CommandType.StoredProcedure);
-                    if (numberOfRowsAffected > 0)
-                        count++;
-                    else
-                        return false;
+
+                    mySqlConnection.Execute(@"insert anotheraddressofprovider(AnotherAddressOfProviderID, ProviderID, AnotherAddress, CreatedDate, CreatedBy) 
+                            values(@AnotherAddressOfProviderID, @ProviderID, @AnotherAddress, @CreatedDate, @CreatedBy)", anotherAddressList, transaction: trans);
+                    trans.Commit();
+                    return true;
+                }
+                catch (Exception)
+                {
+                    trans.Rollback();
+                    return false;
                 }
             }
-            if (count == listData.Count)
-                return true;
-            else return false;
-
-            
         }
-
-
+        
         /// <summary>
         /// API xóa 1 bản ghi theo ID được chọn
         /// </summary>

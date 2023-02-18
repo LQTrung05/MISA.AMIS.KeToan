@@ -31,7 +31,7 @@ namespace MISA.AMIS.KeToan.BL
         /// <param name="providerID">ID của nhà cung cấp muốn xóa</param>
         /// <returns>số bản ghi vừa xóa</returns>
         /// CreatedBy: LQTrung (24/12/2022)
-        public Guid DeleteARecord(Guid providerID);
+        public Guid DeleteRecords(Guid providerID);
     }
 
 }

@@ -52,6 +52,10 @@ namespace MISA.AMIS.KeToan.API.Controllers
                     return StatusCode(StatusCodes.Status200OK, result);
                 return StatusCode(500);
             }
+            catch (MySqlException sqlEx)
+            {
+                return ShowException(sqlEx);
+            }
             catch (Exception ex)
             {
                 return ShowException(ex);

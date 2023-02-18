@@ -85,7 +85,7 @@ namespace MISA.AMIS.KeToan.API.Controllers
         public IActionResult InsertARecord([FromBody] T record)
         {
             try
-            { 
+            {
                 // Xử lý nghiệp vụ
                 var recordID = _baseBL.InsertARecord(record);
                 // Xử lý kết quả trả về
@@ -107,7 +107,7 @@ namespace MISA.AMIS.KeToan.API.Controllers
                         Data = e.ErrorDetails
                     });
             }
-            catch( MySqlException e2)
+            catch (MySqlException e2)
             {
                 Console.WriteLine(e2);
                 return StatusCode(StatusCodes.Status400BadRequest,
@@ -122,7 +122,7 @@ namespace MISA.AMIS.KeToan.API.Controllers
             }
             catch (Exception e)
             {
-               return ShowException(e);
+                return ShowException(e);
             }
         }
 
@@ -143,7 +143,7 @@ namespace MISA.AMIS.KeToan.API.Controllers
                 var result = _baseBL.UpdateARecord(recordID, record);
                 if (result != null)
                     return StatusCode(200, result);
-                else 
+                else
                     return StatusCode(StatusCodes.Status500InternalServerError, result);
             }
             catch (MISAValidateException e)
@@ -200,7 +200,7 @@ namespace MISA.AMIS.KeToan.API.Controllers
                 DevMsg = ex.Message,
                 UsersMsg = ResourceVN.Error_Exception,
                 MoreInfo = ResourceVN.MoreInfo_Exception,
-                TraceId = Guid.NewGuid() 
+                TraceId = Guid.NewGuid()
             };
             return StatusCode(StatusCodes.Status500InternalServerError, error);
         }

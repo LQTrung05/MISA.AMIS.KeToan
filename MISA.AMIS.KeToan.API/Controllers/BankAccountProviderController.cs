@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MISA.AMIS.KeToan.BL;
 using MISA.AMIS.KeToan.Common.Entities;
+using MISA.AMIS.KeToan.Common.Exceptions;
 using MISA.AMIS.KeToan.Common.Resources;
 
 namespace MISA.AMIS.KeToan.API.Controllers
@@ -77,7 +78,7 @@ namespace MISA.AMIS.KeToan.API.Controllers
                 var result = _bankAccountProviderBL.InsertBatch(providerID, listData);
                 //Xử lý kết quả trả về 
                 if (result)
-                    return StatusCode(StatusCodes.Status200OK);
+                    return StatusCode(StatusCodes.Status201Created);
 
                 var error = new Error
                 {
@@ -87,6 +88,18 @@ namespace MISA.AMIS.KeToan.API.Controllers
                     TraceId = Guid.NewGuid()
                 };
                 return StatusCode(StatusCodes.Status500InternalServerError, error);
+            }
+            catch (MISAValidateException e)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest,
+                    new Error
+                    {
+                        DevMsg = e.Message,
+                        UsersMsg = ResourceVN.Error_Exception,
+                        MoreInfo = "https://openapi.misa.com.vn/errorcode",
+                        TraceId = Guid.NewGuid(),
+                        Data = e.ErrorDetails
+                    });
             }
             catch (Exception ex)
             {
@@ -108,11 +121,11 @@ namespace MISA.AMIS.KeToan.API.Controllers
             /// <returns>số bản ghi vừa xóa</returns>
             /// CreatedBy: LQTrung (24/12/2022)
         [HttpDelete("{providerID}/deleteARecord")]
-        public IActionResult DeleteARecord([FromRoute] Guid providerID)
+        public IActionResult DeleteRecords([FromRoute] Guid providerID)
         {
             try
             {
-                var numberOfRowsAffected = _bankAccountProviderBL.DeleteARecord(providerID);
+                var numberOfRowsAffected = _bankAccountProviderBL.DeleteRecords(providerID);
                 //Xử lý kết quả trả về 
                 if (numberOfRowsAffected != null)
                     return StatusCode(StatusCodes.Status200OK, providerID);

@@ -47,51 +47,35 @@ namespace MISA.AMIS.KeToan.DL
         /// Created by: LQTrung (27/12/2022)
         public bool InsertBatch(Guid providerID, List<BankAccountProvider> listData)
         {
-            //Khai báo 1 biến đếm
-            int count = 0;
-            //Chuẩn bị câu lệnh SQL
-            string storeProcedureName = String.Format(Procedure.INSERT, "BankAccountProvider");
-            foreach (var record in listData)
-            {
-                //Chuẩn bị tham số đầu vào
-                record.GetType().GetProperty("ProviderID").SetValue(record, providerID);
-                record.GetType().GetProperty($"{typeof(BankAccountProvider).Name}ID").SetValue(record, Guid.NewGuid());
+            //1. Chuẩn hóa List tài khoản ngân hàng để đưa vào DB.
+            foreach (var bankAccount in listData)
+            { 
+                bankAccount.ProviderID = providerID;
+                bankAccount.BankAccountProviderID = Guid.NewGuid();
+            }
 
+            //2. Sau khi chuẩn hóa thì thực hiện chạy câu lệnh Insert
                 //Khởi tạo kết nối tới DB MySQL
                 using (var mySqlConnection = new MySqlConnection(DatabaseContext.ConnectionString))
                 {
-                    //Thực hiện gọi vào DB
-                    int numberOfRowsAffected = mySqlConnection.Execute(storeProcedureName, record, commandType: System.Data.CommandType.StoredProcedure);
-                    if (numberOfRowsAffected > 0)
-                        count++;
-                    else
-                        return false;
+                mySqlConnection.Open();
+                var trans = mySqlConnection.BeginTransaction();
+                try
+                {
+
+                    mySqlConnection.Execute(@"insert bankaccountprovider(BankAccountProviderID, ProviderID, BankAccountNumber, BankAccountName, BankBranch, OpenedAt, CreatedDate) 
+                            values(@BankAccountProviderID, @ProviderID, @BankAccountNumber, @BankAccountName, @BankBranch, @OpenedAt, @CreatedDate)", listData, transaction: trans);
+
+                    trans.Commit();
+                    return true;
+                }
+                catch (Exception)
+                {
+                    trans.Rollback();
+                    return false;
                 }
             }
-            if (count == listData.Count)
-                return true;
-            else return false;
 
-            //    string ConnectionString = "server=192.168.1xxx";
-            //    StringBuilder sCommand = new StringBuilder("INSERT INTO User (FirstName, LastName) VALUES ");
-            //    //using (MySqlConnection mConnection = new MySqlConnection(ConnectionString))
-            //    using (var mySqlConnection = new MySqlConnection(DatabaseContext.ConnectionString))
-
-            //    {
-            //        List<string> Rows = new List<string>();
-            //        for (int i = 0; i < 100000; i++)
-            //        {
-            //            Rows.Add(string.Format("('{0}','{1}')", MySqlHelper.EscapeString("test"), MySqlHelper.EscapeString("test")));
-            //        }
-            //        sCommand.Append(string.Join(",", Rows));
-            //        sCommand.Append(";");
-            //        mySqlConnection.Open();
-            //        using (MySqlCommand myCmd = new MySqlCommand(sCommand.ToString(), mySqlConnection))
-            //        {
-            //            myCmd.CommandType = CommandType.Text;
-            //            myCmd.ExecuteNonQuery();
-            //        }
-            //    }
         }
 
         /// <summary>
@@ -100,7 +84,7 @@ namespace MISA.AMIS.KeToan.DL
         /// <param name="providerID">ID của nhà cung cấp muốn xóa</param>
         /// <returns>số bản ghi vừa xóa</returns>
         /// CreatedBy: LQTrung (24/12/2022)
-        public Guid DeleteARecord(Guid providerID)
+        public Guid DeleteRecords(Guid providerID)
         {
             //Chuẩn bị câu lệnh SQL
             var storeProcedureName = Procedure.DELTETE_BANKACCOUNTPROVIDER_BY_PROVIDERID;
